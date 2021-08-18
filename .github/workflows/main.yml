@@ -2,7 +2,6 @@ name: USGS_3DEP_LIDAR_custom_package
 on: 
   push:
     branches:
-    - main
 jobs:
   run:
     runs-on: ubuntu-latest 
