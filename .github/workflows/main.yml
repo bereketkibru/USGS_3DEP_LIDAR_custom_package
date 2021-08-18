@@ -1,4 +1,4 @@
-name: Pharmaceutical-Sales-Prediction
+name: USGS_3DEP_LIDAR_custom_package
 on: 
   push:
     branches:
