@@ -2,51 +2,42 @@ import pdal
 import json
 
 
-from boundaries import Boundaries
+
+PUBLIC_DATA_URL = "https://s3-us-west-2.amazonaws.com/usgs-lidar-public/"
+REGION = "IA_FullState"
+bounds = "([-93.756155, 41.918015], [-93.747334, 41.921429])"
+PUBLIC_ACCESS_PATH=f"{PUBLIC_DATA_URL}{REGION}/ept.json"
+out_put_laz_path = "./data/laz/Iowa.laz"
+out_put_tif_path = "./data/tif/Iowa.tif"
+PIPLINE_PATH='./get_data.json'
+
+pipeline_path = './get_data.json'
 
 
-class Lidar_Data_Fetch:
 
-    def __init__(self, public_data_url, fetch_json_path="./get_data.json") -> None:
-        self.public_data_url = public_data_url
-        self.fetch_json_path = fetch_json_path
-        self.out_put_laz_path = "./data/laz/Iowa.laz"
-        self.out_put_tif_path = "./data/tif/Iowa.tif"
+def get_raster_terrain(bounds:str , region:str , public_access_path =     PUBLIC_ACCESS_PATH, output_filename_laz=out_put_laz_path,
+                       ouput_filename_tif = out_put_tif_path,pipeline_path =pipeline_path )->None:
 
-    def __readFetchJson(self, path: str) -> dict:
-        try:
-            with open(path, 'r') as json_file:
-                dict_obj = json.load(json_file)
-            return dict_obj
+    with open(pipeline_path) as json_file:
+        the_json = json.load(json_file)
 
-        except FileNotFoundError as e:
-            print('FETCH_JSON_FILE_NOT_FOUND')
 
-    def getPipeline(self, region: str, bounds: Boundaries):
-        fetch_json = self.__readFetchJson(self.fetch_json_path)
-        BOUND = "([-93.756155, 41.918015], [-93.747334, 41.921429])"
+    the_json['pipeline'][0]['bounds']=bounds
+    the_json['pipeline'][0]['filename']=public_access_path
+    the_json['pipeline'][5]['filename']=output_filename_laz
+    the_json['pipeline'][6]['filename']=ouput_filename_tif
 
-        boundaries = bounds.getBoundStr()
+    pipeline = pdal.Pipeline(json.dumps(the_json))
 
-        full_dataset_path = f"{self.public_data_url}{region}/ept.json"
+    try:
+        
+        exxec = pipeline.execute()
+        metadata = pipeline.metadata
 
-        fetch_json['pipeline'][0]['filename'] = full_dataset_path
-        fetch_json['pipeline'][0]['bounds'] = BOUND
+    except RuntimeError as e :
+        print(e)
+        pass
 
-        fetch_json['pipeline'][3]['filename'] = self.out_put_laz_path
-        fetch_json['pipeline'][4]['filename'] = self.out_put_tif_path
 
-        pipeline = pdal.Pipeline(json.dumps(fetch_json))
-
-        return pipeline
-
-    def runPipeline(self, region: str, bounds: Boundaries):
-        pipeline = self.getPipeline(region, bounds)
-
-        try:
-            pipeline.execute()
-            metadata = pipeline.metadata
-            log = pipeline.log
-        except RuntimeError as e:
-            print(e)
-
+if (__name__== '__main__'):
+    get_raster_terrain(bounds=bounds,region=REGION)
