@@ -1,4 +1,4 @@
-from lidar_fetch_data import Lidar_Data_Fetch
+from get_data import Lidar_Data_Fetch
 from boundaries import Boundaries
 
 
