@@ -3,7 +3,7 @@ import pdal
 
 
 REGION = "IA_FullState"
-BOUND = "([-10425171.940, -10423171.940], [5164494.710, 5166494.710])"
+BOUND = "([-93.756155, -93.747334], [41.918015, 41.921429])"
 PUBLIC_DATA_PATH = "https://s3-us-west-2.amazonaws.com/usgs-lidar-public/"
 PIPELINE_PATH = "./get_data.json"
 
@@ -11,7 +11,7 @@ PIPELINE_PATH = "./get_data.json"
 def get_raster_terrain(
     bounds: str = BOUND,
     regions: str = REGION,
-    output_filename: str = "temp",
+    output_filename: str = "iowa",
     public_access_path: str = PUBLIC_DATA_PATH,
 ) -> None:
   with open(PIPELINE_PATH) as js:
