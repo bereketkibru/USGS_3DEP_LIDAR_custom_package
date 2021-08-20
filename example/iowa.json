@@ -1,7 +1,7 @@
 {
     "pipeline": [
         {
-"bounds": "([-93.756155, -93.747334], [41.918015, 41.921429])",
+"bounds": "([-10425171.940, -10423171.940], [5164494.710, 5166494.710])",
 "filename": "https://s3-us-west-2.amazonaws.com/usgs-lidar-public/IA_FullState/ept.json",
 "type": "readers.ept",
 "tag": "readdata"
@@ -17,6 +17,7 @@
             "type": "filters.assign"
         },
         {
+            "in_srs":"EPSG:3857",
             "out_srs": "EPSG:26915",
             "tag": "reprojectUTM",
             "type": "filters.reprojection"
