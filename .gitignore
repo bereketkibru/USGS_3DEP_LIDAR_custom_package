@@ -4,6 +4,8 @@ __pycache__/
 *$py.class
 #data
 data/
+*.tif
+*.laz
 # C extensions
 *.so
 
