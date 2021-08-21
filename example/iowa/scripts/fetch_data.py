@@ -83,7 +83,18 @@ class FetchData:
         df = df.set_geometry("geometry")
         df.set_crs(self.output_epsg, inplace=True)
         self.file_handler.save_csv(df, "GeodataForFarm")
-        df.to_file("./data/geo/farm.geojson", driver='GeoJSON')
+        x = df.geometry.x
+        y = df.geometry.y
+        z = df.elevation
+        points = np.vstack((x, y, z)).transpose()
+        factor=10
+        decimated_points = points[::factor]
+        fig, ax = plt.subplots(1, 1, figsize=(12, 10))
+        ax = plt.axes(projection='3d')
+        ax.scatter(decimated_points[:,0], decimated_points[:,1], decimated_points[:,2],  s=0.01, color="blue")
+        plt.savefig('./data/img/plot.png', dpi=300, bbox_inches='tight')
+        plt.show()
+        #df.to_file("./data/geo/farm.geojson", driver='GeoJSON')
         return df
     def get_data(self, polygon: Polygon, epsg):
         pipeline = self.run_pipeline(polygon, epsg)
