@@ -3,7 +3,6 @@ import sys
 from logging.handlers import TimedRotatingFileHandler
 from config import Config
 
-
 FORMATTER = logging.Formatter("%(asctime)s — %(name)s — %(levelname)s — %(message)s")
 
 
