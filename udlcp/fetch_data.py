@@ -5,6 +5,9 @@ from shapely.geometry import Polygon, Point
 import sys
 from logger import get_logger
 from file_handler import FileHandler
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits import mplot3d
 
 
 logger = get_logger('FetchData')
@@ -80,8 +83,8 @@ class FetchData:
         df = df.set_geometry("geometry")
         df.set_crs(self.output_epsg, inplace=True)
         self.file_handler.save_csv(df, "GeodataForFarm")
+        df.to_file("./data/geo/farm.geojson", driver='GeoJSON')
         return df
-
     def get_data(self, polygon: Polygon, epsg):
         pipeline = self.run_pipeline(polygon, epsg)
         arr = pipeline.arrays[0]

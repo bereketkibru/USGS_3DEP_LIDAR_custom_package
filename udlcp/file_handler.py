@@ -1,6 +1,7 @@
 import json
 import laspy
 import pandas as pd
+import geopandas as gpd
 from config import Config
 from logger import get_logger
 
@@ -22,6 +23,16 @@ class FileHandler():
     try:
       path = Config.ASSETS_PATH / str(name + '.csv')
       df = pd.read_csv(path, na_values=missing_values)
+      self._logger.info(f"{name} read successfully")
+      return df
+    except FileNotFoundError:
+      self._logger.exception(f"{name} not found")
+
+  def read_gdf(self, name):
+    try:
+      self._logger.info(f"{name} start reading")
+      path = Config.GEO_PATH / str(name + '.geojson')
+      df = gpd.read_file(path)
       self._logger.info(f"{name} read successfully")
       return df
     except FileNotFoundError:
@@ -56,3 +67,10 @@ class FileHandler():
       return las
     except Exception:
       self._logger.exception(f"{name} not found")
+  def save_shp(self, df, name, index=False):
+    try:
+      path = Config.SHP_PATH / str(name + '.shp')
+      gpd.to_file(path)
+      self._logger.info(f"{name} is saved successfully in csv format")
+    except Exception:
+      self._logger.exception(f"{name} save failed")

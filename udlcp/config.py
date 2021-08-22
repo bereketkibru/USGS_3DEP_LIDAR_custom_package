@@ -10,3 +10,4 @@ class Config:
   ASSETS_PATH = ROOT_PATH / "assets/"
   LAZ_PATH = DATA_PATH / "laz"
   TIF_PATH = DATA_PATH / "tif"
+  GEO_PATH = DATA_PATH / "geo"

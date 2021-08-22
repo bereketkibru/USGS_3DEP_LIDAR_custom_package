@@ -6,6 +6,8 @@ __pycache__/
 data/
 *.tif
 *.laz
+*.geojson
+*.csv
 # C extensions
 *.so
 
